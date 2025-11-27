@@ -8,7 +8,6 @@ function App() {
   const [loading, setLoading] = useState(false);
   const chatEndRef = useRef(null);
 
-  // Auto-scroll
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, loading]);
@@ -25,7 +24,6 @@ function App() {
       const res = await axios.post("http://127.0.0.1:5000/chat", {
         message: input,
       });
-
       const botMessage = { role: "bot", text: res.data.response };
       setMessages((prev) => [...prev, botMessage]);
     } catch (err) {
@@ -40,34 +38,46 @@ function App() {
 
   return (
     <div className="chat-container">
-      <div className="messages-box">
-        {messages.map((msg, index) => (
-          <div
-            key={index}
-            className={`message ${msg.role === "user" ? "user" : "bot"}`}
-          >
-            {msg.text}
-          </div>
-        ))}
+      <div className="chat-card">
 
-        {loading && (
-          <div className="message bot dots">
-            <span></span><span></span><span></span>
-          </div>
-        )}
+        <div className="messages-box">
+          {messages.map((msg, index) => (
+              <div key={index} className={`message-wrapper ${msg.role}`}>
+  {msg.role === "bot" && (
+    <img src="/bot.png" className="avatar" alt="bot avatar" />
+  )}
 
-        <div ref={chatEndRef}></div>
-      </div>
+  <div className="message">{msg.text}</div>
 
-      <div className="input-box">
-        <input
-          type="text"
-          placeholder="Type your message..."
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          onKeyDown={(e) => e.key === "Enter" && sendMessage()}
-        />
-        <button onClick={sendMessage}>Send</button>
+  {msg.role === "user" && (
+    <img src="/user.png" className="avatar" alt="user avatar" />
+  )}
+</div>
+
+              ))}
+
+          {loading && (
+            <div className="message-wrapper bot">
+              <div className="message dots">
+                <span></span><span></span><span></span>
+              </div>
+            </div>
+          )}
+
+          <div ref={chatEndRef}></div>
+        </div>
+
+        <div className="input-box">
+          <input
+            type="text"
+            placeholder="Type your message..."
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && sendMessage()}
+          />
+          <button onClick={sendMessage}>➤</button>
+        </div>
+
       </div>
     </div>
   );
