@@ -10,7 +10,7 @@ It includes:
 -   Integration with **Google Gemini** (via `google-generativeai`)
 
 ------------------------------------------------------------------------
-
+![App Screenshot](images/chat_example.png)
 
 ## 🚀 Features
 
